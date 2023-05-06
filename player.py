@@ -1,7 +1,7 @@
 import socket
 import threading
 
-SERVER = "114.119.189.170"
+SERVER = "119.8.174.146"
 PORT = 5555
 ADDR = (SERVER, PORT)
 
