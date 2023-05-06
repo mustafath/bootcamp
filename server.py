@@ -59,4 +59,11 @@ def receive():
         broadcast(f"{nickname} joined the chat!".encode("utf-8"))
         client.send("Connected to the server!".encode("utf-8"))
 
+        thread = threading.Thread(target=handle, args=(client,))
+        thread.start()
+
+if __name__ == "__main__":
+    print("Server started...")
+    server.listen()
+    receive()
 
