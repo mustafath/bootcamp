@@ -1,4 +1,3 @@
-# player.py
 import socket
 import threading
 
@@ -25,9 +24,14 @@ def receive():
             break
 
 def write():
+    move = ""
     while True:
-        message = f"{nickname}: {input('')}"
-        client.send(message.encode("utf-8"))
+        if not move:
+            move = input("Enter your move (rock/paper/scissors): ").lower()
+            message = f"{nickname}: {move}"
+            client.send(message.encode("utf-8"))
+        else:
+            print("Lütfen bekleyiniz...")
 
 if __name__ == "__main__":
     receive_thread = threading.Thread(target=receive)

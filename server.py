@@ -1,4 +1,3 @@
-# server.py
 import socket
 import threading
 
@@ -11,6 +10,7 @@ server.bind(ADDR)
 
 clients = []
 nicknames = []
+moves = {}
 
 def broadcast(message):
     for client in clients:
@@ -19,8 +19,23 @@ def broadcast(message):
 def handle(client):
     while True:
         try:
-            message = client.recv(1024)
-            broadcast(message)
+            message = client.recv(1024).decode("utf-8")
+            nickname, move = message.split(": ")
+            moves[nickname] = move
+
+            if len(moves) == 2:
+                player1, move1 = list(moves.items())[0]
+                player2, move2 = list(moves.items())[1]
+
+                if move1 == move2:
+                    result = f"{player1} and {player2} tied!"
+                elif (move1 == "rock" and move2 == "scissors") or (move1 == "paper" and move2 == "rock") or (move1 == "scissors" and move2 == "paper"):
+                    result = f"{player1} won!"
+                else:
+                    result = f"{player2} won!"
+
+                broadcast(result.encode("utf-8"))
+                moves.clear()
         except:
             index = clients.index(client)
             clients.remove(client)
@@ -44,11 +59,4 @@ def receive():
         broadcast(f"{nickname} joined the chat!".encode("utf-8"))
         client.send("Connected to the server!".encode("utf-8"))
 
-        thread = threading.Thread(target=handle, args=(client,))
-        thread.start()
-
-if __name__ == "__main__":
-    print("Server started...")
-    server.listen()
-    receive()
 
