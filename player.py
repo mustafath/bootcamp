@@ -24,14 +24,17 @@ def receive():
             break
 
 def write():
-    move = ""
+    waiting_for_move = False
     while True:
-        if not move:
+        if not waiting_for_move:
             move = input("Enter your move (rock/paper/scissors): ").lower()
             message = f"{nickname}: {move}"
             client.send(message.encode("utf-8"))
+            waiting_for_move = True
         else:
-            print("Lütfen bekleyiniz...")
+            message = client.recv(1024).decode("utf-8")
+            print(message)
+            waiting_for_move = False
 
 if __name__ == "__main__":
     receive_thread = threading.Thread(target=receive)
