@@ -18,23 +18,17 @@ def receive():
                 client.send(nickname.encode("utf-8"))
             else:
                 print(message)
+                if "won!" in message or "tied!" in message:
+                    write()
         except:
             print("An error occurred!")
             client.close()
             break
 
 def write():
-    waiting_for_move = False
-    while True:
-        if not waiting_for_move:
-            move = input("Enter your move (rock/paper/scissors): ").lower()
-            message = f"{nickname}: {move}"
-            client.send(message.encode("utf-8"))
-            waiting_for_move = True
-        else:
-            message = client.recv(1024).decode("utf-8")
-            print(message)
-            waiting_for_move = False
+    move = input("Enter your move (rock/paper/scissors): ").lower()
+    message = f"{nickname}: {move}"
+    client.send(message.encode("utf-8"))
 
 if __name__ == "__main__":
     receive_thread = threading.Thread(target=receive)
