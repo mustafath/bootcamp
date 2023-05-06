@@ -2,7 +2,7 @@
 import socket
 import threading
 
-SERVER = "localhost"
+SERVER = "0.0.0.0":
 PORT = 5555
 ADDR = (SERVER, PORT)
 
